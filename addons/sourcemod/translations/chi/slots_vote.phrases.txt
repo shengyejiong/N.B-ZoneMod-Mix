@@ -1,0 +1,53 @@
+"Phrases"
+{
+	"Tag"
+	{
+		"en"    	"{blue}[{default}Slots{blue}]{default}"
+	}
+	"NotConsoleVote"
+	{
+		"en"		"[Slots] You must be ingame."
+		"chi"		"[Slots] 你必须在游戏中。"
+	}
+	"LimitSlotsAbove"
+	{
+		"en"		"You can't limit slots above {olive}%i{default} on this Server."
+		"chi"		"该服无法设置空位在 {olive}%i{default} 以上."
+	}
+	"LimitedSlotsTo"
+	{
+		"#format"   "{1:s},{2:i}" // 1:sName 2:Int
+		"en"		"{olive}{1}{default} has limited Slots to {blue}{2}{default}"
+		"chi"		"{olive}{1}{default} 已将空位调整至 {blue}{2}{default}"
+	}
+	"RequiredPlayers"
+	{
+		"en"		"You can't limit Slots lower than required Players."
+		"chi"		"你无法设置空位低于所需的玩家。"
+	}
+	"SlotsUsage"
+	{
+		"en"		"Usage: {olive}!slots{default} <{olive}number{default}> {blue}|{default} Example: {olive}!slots 8{default}"
+		"chi"		"用法: {olive}!slots{default} <{olive}数字{default}> {blue}|{default} 例如: {olive}!slots 8{default}"
+	}
+	"Spectators"
+	{
+		"en"		"Voting isn't allowed for spectators."
+		"chi"		"旁观者无法发起投票。"
+	}
+	"LimitSlots"
+	{
+		"en"		"Limit Slots to '%s'?"
+		"chi"		"设置空位为 '%s'?"
+	}
+	"CannotBeStarted"
+	{
+		"en"		"Vote cannot be started now."
+		"chi"		"现暂无法发起投票。"
+	}
+	"LimitingSlots"
+	{
+		"en"		"Limiting Slots..."
+		"chi"		"限制空位中..."
+	}
+}

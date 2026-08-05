@@ -1,0 +1,7 @@
+"hostport"
+{
+	"default"
+	{
+		"ServerName"		"真拿你没办法听好了【Zonemod2.9.1b】"
+	}
+}

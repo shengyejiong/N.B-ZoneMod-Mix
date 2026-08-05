@@ -1,0 +1,7 @@
+"hostport"
+{
+	"default"
+	{
+		"kDescription"		"我收音机坏了你给我收音机吧"
+	}
+}

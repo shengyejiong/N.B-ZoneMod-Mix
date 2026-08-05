@@ -24,3 +24,13 @@ $RECYCLE.BIN/
 
 # Visual Studio Code files
 /.vscode
+
+# N&B local server secrets and runtime files
+/cfg/server1.cfg
+/addons/sourcemod/logs/
+*.log
+
+# Local crash dumps and temporary files
+*.dmp
+*.mdmp
+*.tmp
