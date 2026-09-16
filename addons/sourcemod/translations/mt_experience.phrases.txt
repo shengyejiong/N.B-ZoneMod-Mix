@@ -3,28 +3,40 @@
     "VOTE_TITLE"
     {
         "en"            "Start balancing teams by player rating"
+        "chi"           "按经验分平衡队伍"
     }
 
     "MENU_ITEM"
     {
         "en"            "Smart team balancing (by rating)"
+        "chi"           "经验分队（支持 2v2/3v3/4v4）"
     }
 
     "PLAYER_UNKNOWN_RATING"
     {
         "#format"       "{1:N}"
         "en"            "Cannot continue: player {olive}{1}{default} has no valid rating"
+        "chi"           "无法继续：尚未取得玩家 {olive}{1}{default} 的有效经验分，请稍后重试"
     }
 
     "PLAYER_NOW_SURVIVOR"
     {
-        "#format"       "{1:N},{2:.1f}"
+        "#format"       "{1:N},{2:d}"
         "en"            "Player {olive}{1}{default} ({green}{2}{default} pts) is now {olive}survivor"
+        "chi"           "玩家 {olive}{1}{default}（{green}{2}{default} 分）已分配至{blue}生还者"
     }
 
     "PLAYER_NOW_INFECTED"
     {
-        "#format"       "{1:N},{2:.1f}"
+        "#format"       "{1:N},{2:d}"
         "en"            "Player {olive}{1}{default} ({green}{2}{default} pts) is now {olive}infected"
+        "chi"           "玩家 {olive}{1}{default}（{green}{2}{default} 分）已分配至{red}感染者"
+    }
+
+    "UNSUPPORTED_PLAYER_COUNT"
+    {
+        "#format"       "{1:d}"
+        "en"            "EXP mix requires exactly 4, 6 or 8 players; currently {1}"
+        "chi"           "经验分队只支持 4、6 或 8 名玩家；当前为 {1} 人"
     }
 }

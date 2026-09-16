@@ -1,0 +1,104 @@
+#if defined _exp_interface_included
+ #endinput
+#endif
+#define _exp_interface_included
+
+/**
+ * 当成功获取一个客户端的经验信息时被调用。
+ *
+ * @param client        客户端索引
+ * @param exp           客户端经验评分
+ */
+forward void L4D2_OnGetExp(int client, int exp);
+
+/**
+ * 获取客户端的经验评分。
+ *
+ * @return              正数为评分，0 为尚未查询，-2 为查询失败
+ */
+native int L4D2_GetClientExp(int client);
+
+/**
+ * 检查所有真人玩家；尚未取得评分的玩家会重新查询。
+ */
+native void L4D2_CheckAndGetAllClientExp();
+
+/**
+ * 获取客户端的 Steam 游戏时长（小时）。
+ * 保留这个旧 native 名称，用于兼容现有 show_exp.smx。
+ */
+native int GetClientGameTime(int client);
+
+enum
+{
+	EXPRANK_1,
+	EXPRANK_2,
+	EXPRANK_3,
+	EXPRANK_4,
+	EXPRANK_5,
+	EXPRANK_6,
+	EXPRANK_7,
+	EXPRANK_8,
+	EXPRANK_9,
+	EXPRANK_SIZE
+}
+
+stock const int EXPRankTable[EXPRANK_SIZE] =
+{
+	20850, // 0.01%
+	18630, // 0.1%
+	14846, // 1%
+	7980,  // 5%
+	3584,  // 20%
+	1949,  // 35%
+	952,   // 50%
+	290,   // 70%
+	0      // 100%
+};
+
+stock const char EXPRankNames[EXPRANK_SIZE][] =
+{
+	"活化石登",
+	"超级老登",
+	"老登",
+	"小老登",
+	"中登",
+	"小中登",
+	"小登",
+	"小小登",
+	"看不见登"
+};
+
+stock int L4D2_GetClientExpRankLevel(int client)
+{
+	int rank = L4D2_GetClientExp(client);
+
+	for (int i = 0; i < EXPRANK_SIZE; i++)
+	{
+		if (rank > EXPRankTable[i]) {
+			return i;
+		}
+	}
+
+	return EXPRANK_SIZE - 1;
+}
+
+public SharedPlugin __pl_exp_interface =
+{
+	name = "exp_interface",
+	file = "exp_interface.smx",
+#if defined REQUIRE_PLUGIN
+	required = 1,
+#else
+	required = 0,
+#endif
+};
+
+#if !defined REQUIRE_PLUGIN
+public void __pl_exp_interface_SetNTVOptional()
+{
+	MarkNativeAsOptional("L4D2_GetClientExp");
+	MarkNativeAsOptional("L4D2_CheckAndGetAllClientExp");
+	MarkNativeAsOptional("GetClientGameTime");
+}
+#endif
