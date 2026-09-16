@@ -11,7 +11,7 @@ public Plugin myinfo =
 	name        = "MixTeamExperience",
 	author      = "SirP, TouchMe, PencilMario, night",
 	description = "Balances 2v2, 3v3 and 4v4 teams by L4D2 EXP",
-	version     = "build_0004-nb-exp",
+	version     = "build_0005-nb-exp",
 	url         = "https://github.com/PencilMario/L4D2-Competitive-Rework"
 };
 
@@ -159,7 +159,6 @@ int FindBestSurvivorMask(Handle players, int playerCount)
 	int maskLimit = 1 << playerCount;
 	int bestMask;
 	int bestDifference = 2147483647;
-	int bestMoves = 2147483647;
 
 	for (int mask = 0; mask < maskLimit; mask++)
 	{
@@ -168,7 +167,6 @@ int FindBestSurvivorMask(Handle players, int playerCount)
 		}
 
 		int survivorRating;
-		int moves;
 
 		for (int index = 0; index < playerCount; index++)
 		{
@@ -179,18 +177,12 @@ int FindBestSurvivorMask(Handle players, int playerCount)
 				survivorRating += player.rating;
 			}
 
-			int previousTeam = GetClientPrevTeam(player.client);
-			if ((survivor && previousTeam != TEAM_SURVIVOR)
-			 || (!survivor && previousTeam != TEAM_INFECTED)) {
-				moves++;
-			}
 		}
 
 		int difference = AbsInt(totalRating - 2 * survivorRating);
-		if (difference < bestDifference || (difference == bestDifference && moves < bestMoves))
+		if (difference < bestDifference)
 		{
 			bestDifference = difference;
-			bestMoves = moves;
 			bestMask = mask;
 		}
 	}
