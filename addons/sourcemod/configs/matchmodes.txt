@@ -2,6 +2,10 @@
 {
 	"ZoneMod Configs"
 	{
+		"zonemod_dv"
+		{
+			"name" "ZoneMod 残疾人对抗"
+		}
 		"zonemod"
 		{
 			"name" "ZoneMod 2.9.2b"
