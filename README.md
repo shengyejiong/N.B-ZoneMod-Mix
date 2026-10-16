@@ -1,6 +1,6 @@
 # N&B服混野配置
 
-本仓库是基于 [SirPlease/L4D2-Competitive-Rework](https://github.com/SirPlease/L4D2-Competitive-Rework) 和 ZoneMod 2.9.2 整理的《求生之路 2》Linux 混野对抗服务器配置。
+本仓库是基于 [SirPlease/L4D2-Competitive-Rework](https://github.com/SirPlease/L4D2-Competitive-Rework) 和 ZoneMod 2.9.2b 整理的《求生之路 2》Linux 混野对抗服务器配置。
 
 这是 N&B 服务器使用的非官方整合版本，不是 Valve、ZoneMod 或 L4D2 Competitive Rework 的官方发行版。上游工程、第三方插件和扩展的版权归各自作者所有；
 
@@ -18,6 +18,8 @@
 本仓库延续上游 GPL-3.0 许可证。第三方组件仍遵循其各自许可证和发布条件，补充说明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。配置与插件是否成功加载仍应以 Linux 服务器上的 `sm plugins list`、控制台和 SourceMod 日志为准。
 
 从本仓库旧版升级的服务器，请参照 [ZoneMod 2.9.2 服务器更新清单](docs/ZoneMod-2.9.2服务器更新清单-20261015.md)。
+
+2.9.2b 在此基础上更新传药修复插件到 1.1，并调整消音冲锋枪和 MP5 参数。新增的 `fix_pill_pass_reload` 默认开启：手持药或针时，按装填键可触发类似右键的传递/推击动作；设为 `0` 可关闭。更新服务器时请合并自身配置，不要覆盖各服独立的开局、Bot 和 Lerp 设置。
 
 ---
 
@@ -59,7 +61,7 @@ In its current state it allows anyone to host their own up to date competitive L
 
 > **Included Matchmodes:**
 
-- **Zonemod 2.9.2**
+- **Zonemod 2.9.2b**
 - **Zonemod Hunters**
 - **Zonemod Retro**
 - **NeoMod 0.4a**
