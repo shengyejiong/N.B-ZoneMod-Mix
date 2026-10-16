@@ -11,7 +11,7 @@ public Plugin myinfo =
 	name        = "MixTeamExperience",
 	author      = "SirP, TouchMe, PencilMario, night",
 	description = "Balances 2v2, 3v3 and 4v4 teams by L4D2 EXP",
-	version     = "build_0005-nb-exp",
+	version     = "build_0006-nb-exp",
 	url         = "https://github.com/PencilMario/L4D2-Competitive-Rework"
 };
 
@@ -29,6 +29,8 @@ enum struct PlayerInfo
 }
 
 int g_iThisMixIndex = -1;
+int g_iMixGeneration;
+bool g_bAbortPending;
 
 public void OnPluginStart()
 {
@@ -38,6 +40,12 @@ public void OnPluginStart()
 public void OnAllPluginsLoaded()
 {
 	g_iThisMixIndex = AddMix(MIN_PLAYERS, 0);
+}
+
+public void OnMapEnd()
+{
+	g_iMixGeneration++;
+	g_bAbortPending = false;
 }
 
 public Action OnDrawVoteTitle(int mixIndex, int client, char[] title, int length)
@@ -62,7 +70,14 @@ public Action OnDrawMenuItem(int mixIndex, int client, char[] title, int length)
 
 public Action OnChangeMixState(int mixIndex, MixState oldState, MixState newState, bool isFail)
 {
-	if (mixIndex != g_iThisMixIndex || newState != MixState_InProgress) {
+	if (mixIndex != g_iThisMixIndex) {
+		return Plugin_Continue;
+	}
+
+	// Invalidate any queued cancellation when this mix changes state again.
+	g_iMixGeneration++;
+	g_bAbortPending = false;
+	if (newState != MixState_InProgress) {
 		return Plugin_Continue;
 	}
 
@@ -81,9 +96,9 @@ public Action OnChangeMixState(int mixIndex, MixState oldState, MixState newStat
 		if (player.rating <= 0)
 		{
 			CPrintToChatAll("%t", "PLAYER_UNKNOWN_RATING", client);
-			L4D2_CheckAndGetAllClientExp();
 			CloseHandle(players);
-			Call_AbortMix();
+			QueueMixAbort();
+			L4D2_CheckAndGetAllClientExp();
 			return Plugin_Handled;
 		}
 
@@ -95,7 +110,7 @@ public Action OnChangeMixState(int mixIndex, MixState oldState, MixState newStat
 	{
 		CPrintToChatAll("%t", "UNSUPPORTED_PLAYER_COUNT", playerCount);
 		CloseHandle(players);
-		Call_AbortMix();
+		QueueMixAbort();
 		return Plugin_Handled;
 	}
 
@@ -114,7 +129,7 @@ public Action OnChangeMixState(int mixIndex, MixState oldState, MixState newStat
 		{
 			CPrintToChatAll("{red}[EXP]{default} 无法移动玩家 {olive}%N{default}，本次分队已取消。", player.client);
 			CloseHandle(players);
-			Call_AbortMix();
+			QueueMixAbort();
 			return Plugin_Handled;
 		}
 
@@ -130,11 +145,38 @@ public Action OnChangeMixState(int mixIndex, MixState oldState, MixState newStat
 		}
 	}
 
-	CPrintToChatAll("[{green}EXP{default}] {blue}生还者 %d{default} / {red}感染者 %d{default} / 分差 %d",
+	CPrintToChatAll("[{green}EXP{default}] 生还者 {olive}%d{default} / 感染者 {olive}%d{default} / 分差 %d",
 		survivorTotal, infectedTotal, AbsInt(survivorTotal - infectedTotal));
 
 	CloseHandle(players);
 	return Plugin_Continue;
+}
+
+void QueueMixAbort()
+{
+	if (g_bAbortPending) {
+		return;
+	}
+
+	// build_0009 writes InProgress AFTER this forward returns. Aborting here
+	// synchronously lets that outer write overwrite None and lock jointeam.
+	g_bAbortPending = true;
+	RequestFrame(Frame_AbortMix, g_iMixGeneration);
+}
+
+public void Frame_AbortMix(any generation)
+{
+	if (!g_bAbortPending || generation != g_iMixGeneration) {
+		return;
+	}
+
+	g_bAbortPending = false;
+	if (GetMixState() != MixState_InProgress || GetMixIndex() != g_iThisMixIndex) {
+		return;
+	}
+
+	// The core has committed InProgress now; its normal abort restores teams.
+	Call_AbortMix();
 }
 
 bool IsSupportedPlayerCount(int playerCount)
