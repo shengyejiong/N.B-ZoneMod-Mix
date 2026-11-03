@@ -19,6 +19,8 @@
 
 从本仓库旧版升级的服务器，请参照 [ZoneMod 2.9.2 服务器更新清单](docs/ZoneMod-2.9.2服务器更新清单-20261015.md)。
 
+2026-11-03 已合入上游截至 `e7bfe751` 的 17 个提交，保留 N&B 自定义配置、ReadyUp 中文模式名和 DV 规则，并将 DV 退出流程适配到新的插件管理器。此次服务器增量更新步骤及完整文件清单见 [2026-11-03 服务器更新清单](docs/上游同步服务器更新清单-20261103.md)。
+
 2.9.2b 在此基础上更新传药修复插件到 1.1，并调整消音冲锋枪和 MP5 参数。新增的 `fix_pill_pass_reload` 默认开启：手持药或针时，按装填键可触发类似右键的传递/推击动作；设为 `0` 可关闭。更新服务器时请合并自身配置，不要覆盖各服独立的开局、Bot 和 Lerp 设置。
 
 ---
@@ -48,8 +50,15 @@
 > **`generalfixes.cfg`** contains all the crucial fixes that will be loaded in every matchmode.  
 >
 > **`sharedplugins.cfg`** is for you, the server owner. You can load any custom plugin that you want to be loaded in every matchmode here.
+> [!NOTE]
 >
+> 比赛模式的加载、退出和切换由 `plugin_manager`（插件管理器）负责，按与加载相反的顺序卸载插件。新版 Confogl 必须配套安装 `addons/sourcemod/plugins/plugin_manager.smx`。
+>
+> `cfg/protectedplugins.cfg` 列出的插件会保留加载状态，默认保护 `left4dhooks` 和 `fixes/command_buffer`。只有其他插件卸载时仍依赖的组件，或确实必须保留运行状态的插件，才应加入保护列表。
+
 > [!CAUTION]
+>
+> 自定义模式的 `confogl_off.cfg` 最后一条有效命令必须为 `pm_unload_plugins refresh`；本仓库的 DV 模式已同步适配。
 >
 > Plugin load locking and unlocking is no longer handled by the configs themselves, refrain from doing it manually or you can run into issues.
 
